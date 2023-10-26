@@ -1,33 +1,20 @@
+import { displayMyCoordinate } from "./display-my-coordinate.mjs";
+import { displayShopCoordinate } from "./display-shop-coordinate.mjs";
+
 export const displayMap = (param) => {
   const { kakao } = window;
+  const { shopX, shopY, myX, myY } = param;
+
+  const middleX = (Number(shopX) + Number(myX)) / 2;
+  const middleY = (Number(shopY) + Number(myY)) / 2;
+
 
   const container = document.querySelector("#map .item_info_body");
   const options = {
-    center: new kakao.maps.LatLng(param.y, param.x),
-    level: 1,
+    center: new kakao.maps.LatLng(middleY, middleX), level: 4,
   };
 
   const map = new kakao.maps.Map(container, options);
-
-  const imageSrc =
-    "https://cdn.icon-icons.com/icons2/2104/PNG/512/map_location_icon_129048.png"; // 마커이미지의 주소입니다
-  const imageSize = new kakao.maps.Size(50, 52); // 마커이미지의 크기입니다
-  const imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-  const markerImage = new kakao.maps.MarkerImage(
-    imageSrc,
-    imageSize,
-    imageOption,
-  );
-
-  const markerPosition = new kakao.maps.LatLng(param.y, param.x); // 마커가 표시될 위치입니다
-
-  // 마커를 생성합니다
-  const marker = new kakao.maps.Marker({
-    position: markerPosition,
-    image: markerImage, // 마커이미지 설정
-  });
-
-  // 마커가 지도 위에 표시되도록 설정합니다
-  marker.setMap(map);
+  displayMyCoordinate(map, { myX, myY });
+  displayShopCoordinate(map, { shopX, shopY });
 };
